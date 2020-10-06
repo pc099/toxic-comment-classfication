@@ -22,11 +22,6 @@ train_df = pd.read_csv(os.path.join(data_path,'jigsaw-toxic-comment-train.csv'))
 val_df = pd.read_csv(os.path.join(data_path,'validation.csv'))
 test_df = pd.read_csv(os.path.join(data_path, 'test.csv'))
 
-val_df['lang'].unique()
-test_df['lang'].unique()
-# ['id', 'comment_text', 'toxic', 'severe_toxic', 'obscene', 'threat','insult', 'identity_hate']
-# lang = ['tr', 'ru', 'it', 'fr', 'pt', 'es']
-# """tr -> Turkish, ru -> Russian, it -> italian, fr -> french, pt -> portuguese , es -> Spanish """
 
 def display_scores(clf, x_train, x_test, y_train, y_test):
     print("In Sample Data:")
@@ -67,8 +62,6 @@ def remove_accented_chars(text):
     text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('utf-8', 'ignore')
     return text
 
-# s = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
-# s = "Python is great and Java is also great"
 
 def removeDup(string):
     return ''.join(OrderedDict.fromkeys(string))
@@ -80,15 +73,12 @@ def simple_stemmer(text):
     return text
 
 
-# def lemmatize_text(text):
-#     text = nlp(text)
-#     text = ' '.join([word.lemma_ if word.lemma_ != '-PRON-' else word.text for word in text])
-#     return text
 
 def simple_stemmer(text):
     ps = nltk.porter.PorterStemmer()
     text = ' '.join([ps.stem(word) for word in text.split()])
     return text
+
 def remove_stopwords(text, is_lower_case=False):
     tokens = tokenizer.tokenize(text)
     tokens = [token.strip() for token in tokens]
@@ -112,17 +102,6 @@ str_def = [removeDup(i) for i in cleaned_data]
 stem_words = [simple_stemmer(i) for i in str_def]
 words = [remove_stopwords(i) for i in stem_words]
 
-# lang_series = []
-# for sample in X:
-#     try:
-#         lang_series.append(detect(sample.replace("\n", ". ")))
-#     except:
-#         lang_series.append("process_error")
-#
-# train_df['language'] = lang_series
-# train_df['comment_text'] = cleaned_data
-# train_df.to_csv(os.path.join(data_path, 'with_lang_train.csv'))
-# train_df['language'].value_counts()
 
 # tfidf
 idf = TfidfVectorizer(use_idf=True)
@@ -179,86 +158,3 @@ submission_df.to_csv(os.path.join(data_path,'submission.csv'), index=False)
 # weighted avg       0.81      0.90      0.86     44710
 # 0.9027734287631403
 
-
-
-#############################################################
-
-# lang_dict ={}
-# no_lang ={}
-# try:
-#     for i in X:
-#         lan_d = detect(i)
-#
-#         if lan_d in lang_dict.keys():
-#             lang_dict[lan_d].append(i)
-#         else:
-#             lang_dict[lan_d] = [i]
-# except:
-#     no_lang = [i]
-
-
-# train_df.to_csv(os.path.join("input_data","with_language_jigsaw-toxic-comment-train.csv"))
-# train_df.columns
-# val_df.columns
-# val_df["toxic"].unique()
-# feat_cols = ["id", "comment_text", "lang"]
-# out_col = "toxic"
-# train_df["lang"].unique()
-# train_df["lang"].value_counts()
-# val_df["lang"].value_counts()
-# test_df["lang"].value_counts()
-# test_languages = list(test_df["lang"].unique())
-# train_df["lang"][train_df["lang"].isin(test_languages)].value_counts()
-
-# df = pd.DataFrame(columns=["language", "document"])
-# undetected_df = pd.DataFrame(columns=["undetected_lang"])
-# try:
-#
-#     for i in X:
-#         lan_d = detect(i)
-#         df.loc[len(df)] = [lan_d, i]
-#
-# except:
-#     undetected_df.loc[len(undetected_df)] = [i]
-
-
-
-
-# from googletrans import Translator
-# trans = Translator()
-# translated = []
-# for k, v in lang_dict.items():
-#     if k != 'en':
-#         for u in v:
-#             t = trans.translate(u).text
-#             translated.append(t)
-#
-# x = lang_dict['en']
-#
-# tokeinzed = []
-# for t in x:
-#     token = word_tokenize(t,language='english')
-#     tokeinzed.append(token)
-#
-# len(tokeinzed)
-# # stop words
-# from nltk.corpus import stopwords
-# stop_words = set(stopwords.words('english'))
-#
-# words = []
-# for i in tokeinzed:
-#     for r in i:
-#         if r not in stop_words:
-#             words.append(i)
-#
-# len(words)
-# def flatten(l):
-#     flatList = []
-#     for elem in l:
-#         if type(elem) == list:
-#             for e in elem:
-#                 flatList.append(e)
-#         else:
-#             flatList.append(elem)
-#     return flatList
-# word_list = flatten(words)
